@@ -98,7 +98,7 @@ def help_command(update: Update, context: CallbackContext) -> None:
 
 def echo(update: Update, context: CallbackContext) -> None:
     """复读用户消息"""
-    if(update.message.text.endswith('webp') or update.message.text.endswith('webm')):
+    if any(update.message.text.endswith(ext) for ext in ('.webp', '.webm', '.tgs', '.mp4')):
         file_name = update.message.text
         if CUSTOM_ENDPOINT_URL in file_name:
             file_name = file_name.replace(CUSTOM_ENDPOINT_URL, '')
