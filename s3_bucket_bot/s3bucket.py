@@ -1,6 +1,7 @@
-import os
-import boto3
 import logging
+import os
+
+import boto3
 from botocore.exceptions import ClientError
 
 AWS_SERVER_PUBLIC_KEY = os.getenv('AWS_SERVER_PUBLIC_KEY')

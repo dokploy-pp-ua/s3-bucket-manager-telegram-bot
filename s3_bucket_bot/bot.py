@@ -98,8 +98,24 @@ def help_command(update: Update, context: CallbackContext) -> None:
 
 def echo(update: Update, context: CallbackContext) -> None:
     """复读用户消息"""
-    update.message.reply_text(update.message.text)
-
+    if(update.message.text.endswith('webp') or update.message.text.endswith('webm')):
+        file_name = update.message.text
+        if CUSTOM_ENDPOINT_URL in file_name:
+            file_name = file_name.replace(CUSTOM_ENDPOINT_URL, '')
+            file_name = file_name.strip().lstrip('/')
+            try:
+                s3_file_path = s3_get_obj_url(file_name)
+                s3_delete_file(file_name)
+                update.message.reply_text(
+                    text=f'文件 {s3_file_path} 已删除，请记得清理CDN缓存'
+                )
+            except Exception as e:
+                logger.error(e)
+                update.message.reply_text(text=f'错误: {e}')
+        else:
+            return
+    else:
+        update.message.reply_text(update.message.text)
 
 def bad_command(update: Update, context: CallbackContext) -> None:
     """触发错误处理器"""
